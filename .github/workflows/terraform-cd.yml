@@ -9,14 +9,20 @@ permissions:
 env:
   TF_IN_AUTOMATION: "true"
   TF_INPUT: "false"
-  TF_VAR_admin_password: ${{ secrets.TF_VAR_ADMIN_PASSWORD }}
-  TF_VAR_enable_rbac_assignments: "false"
-  TF_VAR_enable_policy_assignments: "false"
 
 jobs:
   terraform-plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
+
+    env:
+      TF_VAR_resource_group_name: "rg-enterprise-dev"
+      TF_VAR_location: "centralindia"
+      TF_VAR_subscription_id: ${{ fromJSON(secrets.MY_CRED).subscriptionId }}
+      TF_VAR_tenant_id: ${{ fromJSON(secrets.MY_CRED).tenantId }}
+      TF_VAR_admin_password: ${{ secrets.TF_VAR_ADMIN_PASSWORD }}
+      TF_VAR_enable_rbac_assignments: "false"
+      TF_VAR_enable_policy_assignments: "false"
 
     steps:
       - name: Checkout repository
