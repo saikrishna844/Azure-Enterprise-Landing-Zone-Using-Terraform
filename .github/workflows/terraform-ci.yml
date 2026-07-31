@@ -33,3 +33,14 @@ jobs:
 
       - name: Validate Terraform configuration
         run: terraform validate
+
+      - name: Azure Login
+        uses: azure/login@v2.3.0
+        with:
+          creds: ${{ secrets.MY_CRED }}
+
+      - name: Verify Azure Subscription
+        run: |
+          az account show \
+            --query "{Subscription:name,SubscriptionId:id,TenantId:tenantId}" \
+            --output table
