@@ -54,3 +54,9 @@ variable "enable_policy_assignments" {
   type        = bool
   default     = false
 }
+
+variable "admin_password" {
+  description = "Administrator password for Windows virtual machines"
+  type        = string
+  sensitive   = true
+}

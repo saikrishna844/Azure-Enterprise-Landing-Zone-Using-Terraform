@@ -270,7 +270,7 @@ module "web_vm" {
 
   admin_username = "azureadmin"
 
-  admin_password = data.azurerm_key_vault_secret.vm_password.value
+  admin_password = var.admin_password
 
   storage_account_uri = module.storage_account.primary_blob_endpoint
 
@@ -295,7 +295,7 @@ module "app_vm" {
 
   admin_username = "azureadmin"
 
-  admin_password = data.azurerm_key_vault_secret.vm_password.value
+  admin_password = var.admin_password
 
   storage_account_uri = module.storage_account.primary_blob_endpoint
 
@@ -319,7 +319,7 @@ module "db_vm" {
 
   admin_username = "azureadmin"
 
-  admin_password = data.azurerm_key_vault_secret.vm_password.value
+  admin_password = var.admin_password
 
   storage_account_uri = module.storage_account.primary_blob_endpoint
 
@@ -327,7 +327,7 @@ module "db_vm" {
 
 }
 
-data "azurerm_key_vault" "personal" {
+/* data "azurerm_key_vault" "personal" {
   provider = azurerm.personal
 
   name                = "kv-saikrishna-personal"
@@ -339,7 +339,7 @@ data "azurerm_key_vault_secret" "vm_password" {
 
   name         = "admin-password"
   key_vault_id = data.azurerm_key_vault.personal.id
-}
+} */
 
 module "vm_backup" {
   source = "./modules/vm-backup"
