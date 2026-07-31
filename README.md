@@ -63,5 +63,10 @@ terraform.tfstate
 
 ## Author
 
-Vempati Sai Krishna
-Azure Cloud Analyst
+## Author
+
+**Sai Krishna**
+Azure Cloud | Terraform | DevOps Engineer
+
+GitHub: https://github.com/saikrishna844
+LinkedIn: www.linkedin.com/in/saikrishna-vempati
