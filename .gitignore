@@ -1,17 +1,25 @@
-# Terraform working directory
-.terraform/
+# Terraform working directories
+**/.terraform/*
 
 # Terraform state files
 *.tfstate
 *.tfstate.*
+.terraform.tfstate.lock.info
 
-# Variable files containing secrets
+# Terraform plan files
+*.tfplan
+*.plan
+enterprise.tfplan
+
+# Variable files that may contain secrets
 *.tfvars
+*.tfvars.json
 
-# Terraform crash logs
+# Crash logs
 crash.log
+crash.*.log
 
-# Override files
+# Local override files
 override.tf
 override.tf.json
 *_override.tf
@@ -21,9 +29,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# Sensitive files
-*.pem
-*.key
-
-# VS Code settings (optional)
-.vscode/
+# Local backup files
+Terraform_Backups/
