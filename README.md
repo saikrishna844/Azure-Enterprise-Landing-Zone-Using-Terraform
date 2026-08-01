@@ -13,55 +13,95 @@ This project demonstrates how to provision enterprise-grade Azure infrastructure
 - Visual Studio Code
 
 ## Architecture
+# 🏗 Azure Enterprise Landing Zone Architecture
 
-                                    GitHub
-                                       │
-                                       │
-                          Azure DevOps Pipeline (Later)
-                                       │
-                                       ▼
-                             Terraform Root Module
-                                       │
-     ┌────────────────────────────────────────────────────┐
-     │                                                    │
-     ▼                                                    ▼
-Remote Backend                                   Azure Provider
-(Storage Account)
-     │
-     ▼
-terraform.tfstate
-     │
-────────────────────────────────────────────────────────────────
+```text
+                                      GitHub Repository
+                                             │
+                                             │
+                                      Git Push / PR
+                                             │
+                                             ▼
+                                 GitHub Actions Workflow
+                                             │
+             ┌───────────────────────────────┼───────────────────────────────┐
+             │                               │                               │
+             ▼                               ▼                               ▼
+      Terraform Format                Terraform Validate             Azure Login
+             │                               │                               │
+             └───────────────────────────────┼───────────────────────────────┘
+                                             │
+                                             ▼
+                                 Terraform Remote Backend
+                                             │
+                    Azure Storage Account (terraform.tfstate)
+                                             │
+                                   State Lock (Blob Lease)
+                                             │
+                                             ▼
+                                      Terraform Plan
+                                             │
+                                             ▼
+                              Production Approval (GitHub)
+                                             │
+                                             ▼
+                                      Terraform Apply
+                                             │
+                                             ▼
+================================================================================
+                              AZURE SUBSCRIPTION
+================================================================================
+                                             │
+                                             ▼
+                          Resource Group (rg-enterprise-dev)
+                                             │
+      ┌──────────────────────────────┬──────────────────────────────┐
+      │                              │                              │
+      ▼                              ▼                              ▼
+  Networking                     Security                     Monitoring
+      │                              │                              │
+      ▼                              ▼                              ▼
+ Virtual Network                 Network Security              Log Analytics
+      │                               Groups                     Workspace
+      │                                  │                            │
+      │                                  │                            │
+      ▼                                  ▼                            ▼
+ ┌───────────────┐                Azure Key Vault             Diagnostic Settings
+ │               │                       │                            │
+ ▼               ▼                       ▼                            ▼
+Web Subnet   App Subnet           Managed Identity             Azure Monitor
+ │               │                                                 │
+ ▼               ▼                                                 ▼
+Windows VM    Linux VM                                   Action Groups
+ │               │
+ └───────┬───────┘
+         │
+         ▼
+   Azure Bastion
+         │
+         ▼
+ Secure RDP / SSH Access
 
-                    Resource Group
-                           │
-        ┌──────────────────┼──────────────────────┐
-        │                  │                      │
-        ▼                  ▼                      ▼
-   Networking          Security              Monitoring
-        │                  │                      │
-        ▼                  ▼                      ▼
-      VNet              NSG                 Log Analytics
-        │
-        ▼
-      Subnet
-        │
-        ▼
-    Route Table
-        │
-        ▼
-    Bastion Host
-        │
-        ▼
-     Windows VM
-        │
-        ▼
-     Linux VM
-        │
-        ▼
- Key Vault + Managed Identity
+──────────────────────────────────────────────────────────────────────────────
 
+Azure Storage
+      │
+      ▼
+Private Endpoint
+      │
+      ▼
+Private DNS Zone
 
+──────────────────────────────────────────────────────────────────────────────
+
+Recovery Services Vault
+      │
+      ▼
+VM Backup Policy
+      │
+      ▼
+Windows VM + Linux VM
+```
  
 ## CI Pipeline
 1. Checkout Repository
